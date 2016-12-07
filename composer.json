@@ -1,0 +1,39 @@
+{
+    "name": "soapbox/taxonomyfield",
+    "description": "An extension to add a Taxonomy select field to the Nuffield Trust website.",
+    "type": "bolt-extension",
+    "keywords": [
+        "foo",
+        "bar"
+    ],
+    "require": {
+        "bolt/bolt": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Graham May",
+            "email": "graham.may@soapbox.co.uk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Bolt\\Extension\\Soapbox\\TaxonomyField\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bolt\\Extension\\Soapbox\\TaxonomyField\\Tests\\": "tests",
+            "Bolt\\Tests\\": "vendor/bolt/bolt/tests/phpunit/unit/"
+        }
+    },
+    "extra": {
+        "bolt-assets": "web",
+        "bolt-class": "Bolt\\Extension\\Soapbox\\TaxonomyField\\TaxonomyFieldExtension"
+    }
+}

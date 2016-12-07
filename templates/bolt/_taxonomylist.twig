@@ -1,0 +1,115 @@
+{#=== Options ============================================================================#}
+
+{% set option = {
+info:      field.info|default(''),
+label:     field.label,
+multiple:  (field.multiple is defined and field.multiple),
+required:  field.required|default(false),
+values:    [],
+default:   field.default|default(null),
+} %}
+
+{% set taxonomies = config.get('taxonomy') %}
+{% set taxonomies_to_show = {} %}
+
+{% set values = {} %}
+{% set term_taxonomies = {} %}
+
+{% if field.taxonomies is defined %}
+    {% for key, taxonomy in taxonomies %}
+        {% if key in field.taxonomies %}
+            {% set taxonomies_to_show = taxonomies_to_show + {(key):(taxonomy)} %}
+        {% endif %}
+    {% endfor %}
+{% else %}
+    {% set taxonomies_to_show = taxonomies %}
+{% endif %}
+
+{% for key, taxonomy in taxonomies_to_show %}
+    {% if taxonomy.options is defined %}
+        {% for slug, term in taxonomy.options %}
+            {# Dropdown Values #}
+            {% set values = values + {(slug):(term)} %}
+
+            {# Grouping #}
+            {% set term_taxonomies = term_taxonomies + {(slug):(taxonomy.name)} %}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+
+{#=== FIELDSET ============================================================================#}
+
+{# Get the current selection. Either a single value, or an array. #}
+{% set selection = context.content.get(contentkey)|default(option.default) %}
+{% if selection is not iterable %}
+    {% set selection = [ selection ] %}
+{% endif %}
+
+
+{% if field.sortable|default(false) %}
+    {% set oldclass = option.class %}
+    {% set option = option|merge({ class: oldclass~' select2-sortable wide'}) %}
+
+    {% set newvals = [] %}
+    {% for key, sel in selection %}
+        {% set newvals = newvals|merge({ (key):values[sel]}) %}
+    {% endfor %}
+    {% set values = unique(newvals, values) %}
+{% endif %}
+
+{# If the current selection contains an existing id, we must use _only_ the id, and not accept a fallback. #}
+{% set onlyids = selection|first in values|keys %}
+
+{# Build the select options array #}
+{% set options = [] %}
+{% for id, value in values %}
+    {% set is_array = (value is iterable and (value | length) > 1) %}
+    {% set options = options|merge([{
+    group: term_taxonomies[id],
+    value:     id,
+    text:      is_array ? value[0:]|join(' / ') : value,
+    selected:  id in selection or (not onlyids and (is_array ? value[0] : value) in selection),
+    }]) %}
+{% endfor %}
+
+{# BUIC options #}
+{% set buic_opt_select = {
+'all':       option.multiple,
+'clear':     true,
+'id':        key,
+'multiple':  option.multiple,
+'name':      option.multiple ? name ~ '[]' : name,
+'options':   options,
+'required':  option.required
+} %}
+
+{% extends '@bolt/_base/_fieldset.twig' %}
+
+{% block fieldset_type 'select' %}
+{% block fieldset_widget 'fieldSelect' %}
+
+{% set fieldset_conf = {
+autocomplete: field.autocomplete|default(false)
+} %}
+
+{% block fieldset_label_text  labelkey %}
+{% block fieldset_label_info  option.info %}
+{% block fieldset_label_class 'col-sm-3' %}
+{% block fieldset_label_for   key %}
+
+{% block fieldset_controls %}
+    {% if field.sortable|default(false) %}
+        <script>
+            $(function () {
+                $(function () {
+                    $('#{{ key }}').select2('destroy').select2Sortable({});
+                });
+            });
+        </script>
+    {% endif %}
+    {% from '@bolt/_buic/_select.twig' import buic_select %}
+
+    <div class="col-sm-9{{ (field.sortable|default(false)) ? ' sortable-select2-container' }}">
+        {{ buic_select(buic_opt_select) }}
+    </div>
+{% endblock fieldset_controls %}
