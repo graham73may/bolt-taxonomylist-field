@@ -1,6 +1,6 @@
 # Taxonomylist field type
 
-This adds a new field type of `taxonomylist`. This works in the same way as 
+This adds a new field type of `taxonomylist`. This works in the same way as a select field. 
 
 To add a taxonomylist field, first install this extension then modify your `contenttypes.yml` file to add a
 new field, something like this:
