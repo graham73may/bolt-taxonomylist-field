@@ -1,10 +1,10 @@
 {
     "name": "soapbox/taxonomyfield",
-    "description": "An extension to add a Taxonomy select field to the Nuffield Trust website.",
+    "description": "An extension to add a Taxonomy select field to Bolt.",
     "type": "bolt-extension",
     "keywords": [
-        "foo",
-        "bar"
+        "taxonomy",
+        "select"
     ],
     "require": {
         "bolt/bolt": "^3.0"
