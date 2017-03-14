@@ -11,11 +11,14 @@ default:   field.default|default(null),
 
 {% set taxonomies = config.get('taxonomy') %}
 {% set taxonomies_to_show = {} %}
+{% set taxonomy_groups_count = taxonomies|length %}
 
 {% set values = {} %}
 {% set term_taxonomies = {} %}
 
 {% if field.taxonomies is defined %}
+    {% set taxonomy_groups_count = field.taxonomies|length %}
+
     {% for key, taxonomy in taxonomies %}
         {% if key in field.taxonomies %}
             {% set taxonomies_to_show = taxonomies_to_show + {(key):(taxonomy)} %}
@@ -65,7 +68,7 @@ default:   field.default|default(null),
 {% for id, value in values %}
     {% set is_array = (value is iterable and (value | length) > 1) %}
     {% set options = options|merge([{
-    group: term_taxonomies[id],
+    group: taxonomy_groups_count > 1 ? term_taxonomies[id] : null,
     value:     id,
     text:      is_array ? value[0:]|join(' / ') : value,
     selected:  id in selection or (not onlyids and (is_array ? value[0] : value) in selection),
