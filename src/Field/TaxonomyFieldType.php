@@ -21,7 +21,7 @@ class TaxonomyFieldType implements FieldInterface
     public function getTemplate()
     {
 
-        return '_taxonomylist.twig';
+        return '@bolt/_taxonomylist.twig';
     }
 
     public function getStorageType()
