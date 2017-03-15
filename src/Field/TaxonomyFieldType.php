@@ -1,7 +1,8 @@
 <?php
 namespace Bolt\Extension\Soapbox\TaxonomyField\Field;
 
-use Bolt\Storage\Field\FieldInterface;
+use Bolt\Storage\Field\Type\FieldTypeBase;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * This class extends the base field type and looks after serializing and hydrating the field
@@ -9,7 +10,7 @@ use Bolt\Storage\Field\FieldInterface;
  *
  * @author Graham May <graham.may@soapbox.co.uk>
  */
-class TaxonomyFieldType implements FieldInterface
+class TaxonomyFieldType extends FieldTypeBase
 {
 
     public function getName()
@@ -27,15 +28,13 @@ class TaxonomyFieldType implements FieldInterface
     public function getStorageType()
     {
 
-        return 'text';
+        return Type::getType('json_array');
     }
 
     public function getStorageOptions()
     {
 
-        return [
-            'default' => ''
-        ];
+        return [];
     }
 
 }
