@@ -3,7 +3,7 @@
 {% set option = {
 info:      field.info|default(''),
 label:     field.label,
-multiple:  (field.multiple is defined and field.multiple),
+multiple:  (field.type == 'taxonomylistmultiple'),
 required:  field.required|default(false),
 values:    [],
 default:   field.default|default(null),
@@ -49,15 +49,17 @@ default:   field.default|default(null),
 {% endif %}
 
 
-{% if field.sortable|default(false) %}
-    {% set oldclass = option.class %}
-    {% set option = option|merge({ class: oldclass~' select2-sortable wide'}) %}
-
-    {% set newvals = [] %}
+{# if we have (sorted) options present already, make sure their order is
+   maintained. We do this by first selecting the current values, and then
+   merging that with the entire array of values. See #6332. #}
+{% if option.sortable %}
+    {% set leadingvalues = [] %}
     {% for key, sel in selection %}
-        {% set newvals = newvals|merge({ (key):values[sel]}) %}
+        {% for value_key, value_sel in values if value_sel == sel %}
+            {% set leadingvalues = leadingvalues|merge({ (value_key): value_sel}) %}
+        {% endfor %}
     {% endfor %}
-    {% set values = unique(newvals, values) %}
+    {% set values = unique(leadingvalues, values) %}
 {% endif %}
 
 {# If the current selection contains an existing id, we must use _only_ the id, and not accept a fallback. #}

@@ -1,4 +1,5 @@
 <?php
+
 namespace Bolt\Extension\Soapbox\TaxonomyField\Field;
 
 use Bolt\Storage\Field\Type\FieldTypeBase;
@@ -10,13 +11,13 @@ use Doctrine\DBAL\Types\Type;
  *
  * @author Graham May <graham.may@soapbox.co.uk>
  */
-class TaxonomyFieldType extends FieldTypeBase
+class TaxonomyMultipleFieldType extends FieldTypeBase
 {
 
     public function getName()
     {
 
-        return 'taxonomylist';
+        return 'taxonomylistmultiple';
     }
 
     public function getTemplate()
@@ -28,15 +29,13 @@ class TaxonomyFieldType extends FieldTypeBase
     public function getStorageType()
     {
 
-        return Type::getType('text');
+        return Type::getType('json_array');
     }
 
     public function getStorageOptions()
     {
 
-        return [
-            'default' => ''
-        ];
+        return [];
     }
 
 }
