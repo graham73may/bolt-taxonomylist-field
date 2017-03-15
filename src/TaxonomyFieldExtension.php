@@ -3,6 +3,7 @@
 namespace Bolt\Extension\Soapbox\TaxonomyField;
 
 use Bolt\Extension\Soapbox\TaxonomyField\Field\TaxonomyFieldType;
+use Bolt\Extension\Soapbox\TaxonomyField\Field\TaxonomyMultipleFieldType;
 use Bolt\Extension\SimpleExtension;
 use Bolt\Extension\Soapbox\TaxonomyField\Provider\TaxonomyFieldProvider;
 
@@ -39,6 +40,7 @@ class TaxonomyFieldExtension extends SimpleExtension
 
         return [
             new TaxonomyFieldType(),
+            new TaxonomyMultipleFieldType(),
         ];
     }
 
