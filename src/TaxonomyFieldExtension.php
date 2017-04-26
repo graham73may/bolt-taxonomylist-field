@@ -5,6 +5,8 @@ namespace Bolt\Extension\Soapbox\TaxonomyField;
 use Bolt\Extension\Soapbox\TaxonomyField\Field\TaxonomyFieldType;
 use Bolt\Extension\SimpleExtension;
 
+use Bolt\Extension\Soapbox\TaxonomyField\Provider\TaxonomyFieldProvider;
+
 /**
  * The main extension class.
  *
@@ -29,6 +31,15 @@ class TaxonomyFieldExtension extends SimpleExtension
 
         return [
             new TaxonomyFieldType(),
+        ];
+    }
+
+    public function getServiceProviders()
+    {
+
+        return [
+            $this,
+            new TaxonomyFieldProvider()
         ];
     }
 

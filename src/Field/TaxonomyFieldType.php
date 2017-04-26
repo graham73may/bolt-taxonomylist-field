@@ -1,15 +1,16 @@
 <?php
+
 namespace Bolt\Extension\Soapbox\TaxonomyField\Field;
 
 use Bolt\Storage\Field\FieldInterface;
+use Bolt\Storage\Field\Type\FieldTypeBase;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * This class extends the base field type and looks after serializing and hydrating the field
  * on save and load.
- *
- * @author Graham May <graham.may@soapbox.co.uk>
  */
-class TaxonomyFieldType implements FieldInterface
+class TaxonomyFieldType extends FieldTypeBase
 {
 
     public function getName()
@@ -18,16 +19,10 @@ class TaxonomyFieldType implements FieldInterface
         return 'taxonomylist';
     }
 
-    public function getTemplate()
-    {
-
-        return '_taxonomylist.twig';
-    }
-
     public function getStorageType()
     {
 
-        return 'text';
+        return Type::getType('text');
     }
 
     public function getStorageOptions()
@@ -37,5 +32,4 @@ class TaxonomyFieldType implements FieldInterface
             'default' => ''
         ];
     }
-
 }
