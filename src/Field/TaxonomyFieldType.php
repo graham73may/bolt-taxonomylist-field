@@ -22,6 +22,10 @@ class TaxonomyFieldType extends FieldTypeBase
     public function getStorageType()
     {
 
+        if ((isset($this->mapping['data']['multiple']) && ($this->mapping['data']['multiple'])) || (isset($this->mapping['multiple']) && ($this->mapping['multiple']))) {
+            return Type::getType('json_array');
+        }
+
         return Type::getType('text');
     }
 
